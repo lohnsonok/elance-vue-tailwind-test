@@ -6,7 +6,7 @@
     "type": "git",
     "url": "git+https://github.com/lohnsonok/vue-tailwind-test"
   },
-  "author": "lohnsonok <lohnsonok@gmail.com> (https://www.lionelokpeicha.dev/)",
+  "author": "lohnsonok <lohnsonok@gmail.com>",
   "license": "MIT",
   "private": false,
   "scripts": {

@@ -1,384 +1,7 @@
 <template>
-  <v-container>
-    <v-container
-      v-if="$vuetify.breakpoint.mdAndUp"
-      class="ml-n3 d-md-flex flex-column"
-    >
-      <v-row>
-        <v-col
-          :cols="12"
-          :md="5"
-        >
-          <a
-            class="undecorated black--text"
-            text
-            :href="
-              informationalUrl(
-                '/knowledge-center/your-account/solar-potential'
-              )
-            "
-            alt="élance potentiel solaire"
-            rel="noopener noreferer"
-            target="_blank"
-          >
-            <p class="text-left caption mb-4">
-              {{ $t("home.form.in-24h-we-respond") }}
-            </p>
-          </a>
-          <v-form
-            v-model="valid"
-            @submit.prevent="saveLead"
-          >
-            <v-text-field
-              v-model="name"
-              :label="$t('common.last-name')"
-              :rules="validationRules.name"
-              filled
-              rounded
-              required
-              hide-details
-              dense
-              class="my-4"
-            />
-            <v-text-field
-              v-model="email"
-              :label="$t('common.email-address')"
-              :rules="validationRules.email"
-              filled
-              rounded
-              required
-              hide-details
-              dense
-              class="my-4"
-            />
-            <v-autocomplete
-              v-model="formattedSearchAddress"
-              :items="searchResults"
-              :loading="loadingAddress"
-              :disabled="loadingAddress"
-              :search-input.sync="search"
-              item-text="description"
-              return-object
-              dense
-              filled
-              rounded
-              clearable
-              :rules="validationRules.address"
-              :label="
-                geocoder
-                  ? $t('common.address')
-                  : $t('home.form.loading-google-maps')
-              "
-              @input="onAddressInput"
-            >
-              <template #no-data>
-                <v-list-item>
-                  <v-list-item-title>
-                    {{ $t("common.no-address-found") }}
-                  </v-list-item-title>
-                </v-list-item>
-              </template>
-              <!-- eslint-disable-next-line vue/no-unused-vars -->
-              <template #selection="{ attr, on, item, selected }">
-                <v-list-item>
-                  <v-list-item-content>
-                    <span v-text="item.description" />
-                  </v-list-item-content>
-                </v-list-item>
-              </template>
-            </v-autocomplete>
-            <div class="mt-n2 mb-2">
-              <v-icon color="black">
-                mdi-map-marker
-              </v-icon>
-              <a
-                class="undecorated black--text"
-                text
-                :href="
-                  informationalUrl(
-                    '/knowledge-center/your-account/solar-potential'
-                  )
-                "
-                alt="élance solar potential link"
-                rel="noopener noreferer"
-                target="_blank"
-              >
-                <small>{{ $t("home.form.verify-map-pin-location") }}</small>
-              </a>
-            </div>
-            <v-icon color="black">
-              mdi-lock
-            </v-icon>
-            <a
-              class="undecorated black--text"
-              text
-              :href="
-                informationalUrl(
-                  '/knowledge-center/your-account/data-privacy'
-                )
-              "
-              alt="élance privacy policy link"
-              rel="noopener noreferer"
-              target="_blank"
-            >
-              <small>{{ $t("common.stay-private") }}</small>
-            </a>
-            <v-row class="mt-4">
-              <v-switch
-                v-model="wantsCall"
-                class="ml-5"
-                inset
-              >
-                <template #label>
-                  <a v-if="wantsCall">
-                    {{ $t("home.form.want-to-be-called") }}
-                  </a>
-                  <a v-else>
-                    {{ $t("home.form.do-no-want-to-be-called") }}
-                  </a>
-                </template>
-              </v-switch>
-            </v-row>
-            <template v-if="wantsCall">
-              <v-text-field
-                v-model="phone"
-                :label="$t('common.phone-number')"
-                :rules="validationRules.phone"
-                filled
-                rounded
-                required
-                hide-details
-                dense
-                class="my-4"
-              />
-            </template>
-
-            <v-btn
-              block
-              large
-              :elevation="hover ? 12 : 5"
-              type="submit"
-              :loading="saving"
-              :disabled="
-                !valid || saving || saved || loadingAddress || loadingMap
-              "
-              class="mt-4 text-center black--text"
-            >
-              {{ $t("lead-quote-review.check-solar-production.button") }}
-            </v-btn>
-          </v-form>
-        </v-col>
-        <v-col
-          v-if="showMap"
-          :cols="12"
-          :md="7"
-          class="my-0 py-0 pa-10"
-        >
-          <gmap-map
-            ref="mapDesktop"
-            class="fill-height map ma-0 pa-0"
-            :class="{ 'loading-map': loadingMap }"
-            :center="map.center"
-            :zoom="map.zoom"
-            :options="map.options"
-            map-type-id="satellite"
-            @click="updateAddressFromMarker"
-          >
-            <gmap-marker
-              v-if="map.marker"
-              :position="map.marker"
-            />
-          </gmap-map>
-        </v-col>
-      </v-row>
-    </v-container>
-
-    <v-container
-      v-else-if="$vuetify.breakpoint.smAndDown"
-      :class="$vuetify.breakpoint.xs ? 'ml-n4' : 'ml-n8'"
-    >
-      <v-row>
-        <v-col :cols="12">
-          <a
-            class="undecorated black--text"
-            text
-            :href="
-              informationalUrl(
-                '/knowledge-center/your-account/solar-potential'
-              )
-            "
-            alt="élance potentiel solaire"
-            rel="noopener noreferer"
-            target="_blank"
-          >
-            <p class="text-left caption mb-4">
-              {{ $t("home.form.in-24h-we-respond") }}
-            </p>
-          </a>
-          <v-form
-            v-model="valid"
-            @submit.prevent="saveLead"
-          >
-            <v-text-field
-              v-model="name"
-              :label="$t('common.last-name')"
-              :rules="validationRules.name"
-              rounded
-              filled
-              dense
-              required
-              hide-details
-              class="my-2"
-            />
-            <v-text-field
-              v-model="email"
-              :label="$t('common.email-address')"
-              :rules="validationRules.email"
-              rounded
-              filled
-              dense
-              required
-              hide-details
-              class="my-2"
-            />
-            <v-autocomplete
-              v-model="formattedSearchAddress"
-              :items="searchResults"
-              :loading="loadingAddress"
-              :disabled="loadingAddress"
-              :search-input.sync="search"
-              return-object
-              item-text="description"
-              dense
-              rounded
-              filled
-              clearable
-              :rules="validationRules.address"
-              :label="
-                geocoder
-                  ? $t('common.address')
-                  : $t('home.form.loading-google-maps')
-              "
-              @input="onAddressInput"
-            >
-              <template #no-data>
-                <v-list-item>
-                  <v-list-item-title>
-                    {{ $t("common.no-address-found") }}
-                  </v-list-item-title>
-                </v-list-item>
-              </template>
-              <!-- eslint-disable-next-line vue/no-unused-vars -->
-              <template #selection="{ attr, on, item, selected }">
-                <v-list-item>
-                  <v-list-item-content>
-                    <span v-text="item.description" />
-                  </v-list-item-content>
-                </v-list-item>
-              </template>
-            </v-autocomplete>
-            <v-container v-if="showMap">
-              <gmap-map
-                ref="mapMobile"
-                class="fill-height mobile-map"
-                :class="{ 'loading-map': loadingMap }"
-                :center="map.center"
-                :zoom="map.zoom"
-                :options="map.options"
-                map-type-id="satellite"
-                @click="updateAddressFromMarker"
-              >
-                <gmap-marker
-                  v-if="map.marker"
-                  :position="map.marker"
-                />
-              </gmap-map>
-            </v-container>
-
-            <div class="mb-2 mt-n2">
-              <v-icon color="black">
-                mdi-map-marker
-              </v-icon>
-              <a
-                class="undecorated black--text"
-                text
-                :href="
-                  informationalUrl(
-                    '/knowledge-center/your-account/solar-potential'
-                  )
-                "
-                alt="élance potentiel solaire"
-                rel="noopener noreferer"
-                target="_blank"
-              >
-                <small>{{ $t("home.form.verify-map-pin-location") }}</small>
-              </a>
-            </div>
-            <v-icon color="black">
-              mdi-lock
-            </v-icon>
-            <a
-              class="undecorated black--text"
-              text
-              :href="
-                informationalUrl(
-                  '/knowledge-center/legal/déclaration-confidentialité'
-                )
-              "
-              alt="élance privacy policy link"
-              rel="noopener noreferer"
-              target="_blank"
-            >
-              <small>{{ $t("common.stay-private") }}</small>
-            </a>
-            <v-row class="mt-4">
-              <v-switch
-                v-model="wantsCall"
-                class="ml-5"
-                inset
-              >
-                <template #label>
-                  <a v-if="wantsCall">
-                    {{ $t("home.form.want-to-be-called") }}
-                  </a>
-                  <a v-else>
-                    {{ $t("home.form.do-no-want-to-be-called") }}
-                  </a>
-                </template>
-              </v-switch>
-            </v-row>
-            <template v-if="wantsCall">
-              <v-text-field
-                v-model="phone"
-                :label="$t('common.phone-number')"
-                :rules="validationRules.phone"
-                rounded
-                filled
-                required
-                hide-details
-                dense
-                class="my-4"
-              />
-            </template>
-            <v-row>
-              <v-btn
-                block
-                :elevation="hover ? 12 : 5"
-                type="submit"
-                :loading="saving"
-                :disabled="
-                  !valid || saving || saved || loadingAddress || loadingMap
-                "
-                class="mobile-button mt-4 text-center black--text mx-0 pa-0"
-              >
-                {{ $t("lead-quote-review.check-solar-production.button") }}
-              </v-btn>
-            </v-row>
-          </v-form>
-        </v-col>
-      </v-row>
-    </v-container>
-  </v-container>
+  <div :class="classes.container">
+    55
+  </div>
 </template>
 
 <script>
@@ -399,6 +22,13 @@ export default {
 
   data() {
     return {
+      classes: {
+        container: 'flex flex-column justify-center align-center',
+        row: 'flex md:flex-row flex-col',
+        col: 'md:px-4 px-0 mt-8',
+        form: 'md:px-4 px-0 mt-8',
+        button: 'rounded-lg border border-yellow-100 bg-yellow-100 px-5 py-2.5 text-center text-sm font-medium text-yellow-600 transition-all hover:border-yellow-200 hover:bg-yellow-200 focus:ring focus:ring-yellow-50 disabled:opacity-70',
+      },
       name: '',
       email: '',
       searchAddress: {},
@@ -451,7 +81,7 @@ export default {
         phone: [
           (v) => !!v || this.$t('common.phone-number-is-required'),
           (v) => (v ? validatePhone(v) : true)
-              || this.$t('common.phone-number-must-be-valid'),
+            || this.$t('common.phone-number-must-be-valid'),
         ],
       },
 
@@ -470,7 +100,7 @@ export default {
     showMap() {
       return !(
         navigator.userAgent.toString().includes('Googlebot')
-          || navigator.userAgent.toString().includes('HeadlessChrome')
+        || navigator.userAgent.toString().includes('HeadlessChrome')
       );
     },
 
@@ -583,10 +213,10 @@ export default {
               this.searchAddress = { description: results[0].formatted_address, placeId: results[0].place_id };
 
               this.map.addressComponents.houseNumber = this.scrapeAddressComponent(results[0], 'street_number')
-                        || this.scrapeAddressComponent(results[0], 'subpremise');
+                || this.scrapeAddressComponent(results[0], 'subpremise');
               this.map.addressComponents.streetLine = this.scrapeAddressComponent(results[0], 'street_address')
-                        || this.scrapeAddressComponent(results[0], 'route')
-                        || this.scrapeAddressComponent(results[0], 'colloquial_area');
+                || this.scrapeAddressComponent(results[0], 'route')
+                || this.scrapeAddressComponent(results[0], 'colloquial_area');
               this.map.addressComponents.city = this.scrapeAddressComponent(
                 results[0],
                 'locality',
@@ -640,10 +270,10 @@ export default {
             if (status === 'OK' && results.length > 0) {
               this.map.marker = results[0].geometry.location;
               this.map.addressComponents.houseNumber = this.scrapeAddressComponent(results[0], 'street_number')
-                        || this.scrapeAddressComponent(results[0], 'subpremise');
+                || this.scrapeAddressComponent(results[0], 'subpremise');
               this.map.addressComponents.streetLine = this.scrapeAddressComponent(results[0], 'street_address')
-                        || this.scrapeAddressComponent(results[0], 'route')
-                        || this.scrapeAddressComponent(results[0], 'colloquial_area');
+                || this.scrapeAddressComponent(results[0], 'route')
+                || this.scrapeAddressComponent(results[0], 'colloquial_area');
               this.map.addressComponents.city = this.scrapeAddressComponent(
                 results[0],
                 'locality',

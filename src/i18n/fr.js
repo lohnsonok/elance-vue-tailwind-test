@@ -14,13 +14,13 @@ const French = {
     'review-quote-button': 'Vérifier mon devis',
     'check-technicals-for-quote': {
       title: 'Compte rendu technique du devis',
-      description: 'Profitez d’une expertise indépenante',
+      description: 'Profitez d’une expertise indépendante pour vérifier votre devis de panneaux solaires.',
       'file-input-label': 'Téléchargez votre devis',
     },
     'check-solar-production': {
-      title: 'déterminez votre production photovoltaïque ',
-      description: 'calcul de votre production réelle (en kWh) du devis',
-      button: 'calcul de la production d’électricité',
+      title: 'Déterminez votre production photovoltaïque',
+      description: 'Calculer votre production réelle (en kWh) du devis',
+      button: 'Calculer ma production d’électricité',
     },
     'review-message': {
       '<2': 'le prix n’est pas complet, vérifiez votre devis',
