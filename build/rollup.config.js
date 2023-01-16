@@ -7,19 +7,24 @@ const globals = {
   vue: 'Vue',
 };
 
-const config = {
-  input: 'src/**/*.vue',
-  output: {
-    dir: 'dist',
-    format: 'esm',
-    globals,
+const config = [
+  {
+    input: 'src/index.js', // Path relative to package.json
+    output: {
+      sourcemap: true,
+      dir: 'dist',
+      entryFileNames: 'vue-tailwind.js',
+      format: 'umd',
+      name: 'VueTailwind',
+      exports: 'named',
+      globals,
+    },
+    external: Object.keys(globals),
+    plugins: [
+      del({ targets: 'dist/*' }),
+      vue(),
+    ],
   },
-  plugins: [
-    del({ targets: 'dist/*' }),
-    multiInput(),
-    css(),
-    vue({ css: false }),
-  ],
-};
+];
 
 export default config;
