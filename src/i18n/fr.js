@@ -29,6 +29,10 @@ const French = {
       '>5': 'ce devis est hors de prix',
     },
   },
+  common: {
+    'after-tax-amount-is-required': 'Le montant TTC est requis',
+    'system-size-is-required': 'La taille du système est requise',
+  },
   footer: {
     description: 'Elance, leader dans le fourniture de panneaux solaires et de solutions d\'énergie renouvelable.',
     menu: {

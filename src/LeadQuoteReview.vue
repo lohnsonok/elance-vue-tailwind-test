@@ -10,20 +10,57 @@
     </p>
 
     <div :class="classes.card">
-      <form :class="classes.form">
-        <div class="md:flex justify-center" :class="classes.row">
-          <div :class="classes.col" class="md:w-1/2">
-            <Input v-model="form.quoteReviewDetails.afterTaxAmount" :label="$t('lead-quote-review.after-tax-price')"
-              :rules="form.validationRules.afterTaxAmount" required type="number" class="my-4" />
+      <form
+        id="app"
+        action
+        method="post"
+        name="form"
+        :class="classes.form"
+        @submit.prevent="onSubmit"
+      >
+        <div
+          class="md:flex justify-center"
+          :class="classes.row"
+        >
+          <div
+            :class="classes.col"
+            class="md:w-1/2"
+          >
+            <Input
+              v-model="form.quoteReviewDetails.afterTaxAmount"
+              name="afterTaxAmount"
+              :label="$t('lead-quote-review.after-tax-price')"
+              :rules="form.validationRules.afterTaxAmount"
+              required
+              type="number"
+              class="my-4"
+            />
           </div>
-          <div :class="classes.col" class="md:w-1/2">
-            <Input v-model="form.quoteReviewDetails.systemSize" :label="$t('lead-quote-review.system-size')"
-              :rules="form.validationRules.systemSize" type="number" class="my-4" />
+          <div
+            :class="classes.col"
+            class="md:w-1/2"
+          >
+            <Input
+              v-model="form.quoteReviewDetails.systemSize"
+              name="systemSize"
+              :label="$t('lead-quote-review.system-size')"
+              :rules="form.validationRules.systemSize"
+              type="number"
+              class="my-4"
+            />
           </div>
         </div>
-        <div :class="classes.col" class="text-center">
-          <button v-if="!displayQuoteReview" :disabled="!form.valid" @click="displayQuoteReview = true"
-            :class="classes.button">
+        <div
+          :class="classes.col"
+          class="text-center"
+        >
+          <button
+            v-if="!displayQuoteReview"
+            type="submit"
+            :disabled="!validateForm"
+            :class="classes.button"
+            @click="displayQuoteReview = true"
+          >
             {{ $t('lead-quote-review.review-quote-button') }}
           </button>
         </div>
@@ -100,7 +137,7 @@ export default {
         row: 'md:flex-row flex-col',
         col: 'md:px-4 px-0 mt-8',
         form: 'md:px-4 px-0 mt-8',
-        button: 'rounded-lg border border-yellow-100 bg-yellow-100 px-5 py-2.5 text-center text-sm font-medium text-yellow-600 transition-all hover:border-yellow-200 hover:bg-yellow-200 focus:ring focus:ring-yellow-50 disabled:border-yellow-50 disabled:bg-yellow-50 disabled:text-blue-400',
+        button: 'rounded-lg border border-yellow-100 bg-yellow-100 px-5 py-2.5 text-center text-sm font-medium text-yellow-600 transition-all hover:border-yellow-200 hover:bg-yellow-200 focus:ring focus:ring-yellow-50 disabled:opacity-70',
       },
       displayQuoteReview: false,
       displayLeadForm: false,
@@ -114,15 +151,14 @@ export default {
         },
 
         validationRules: {
-          afterTaxAmount: [(v) => !!v || this.$t('common.last-name-is-required')],
-          systemSize: [(v) => !!v || this.$t('common.last-name-is-required')],
+          afterTaxAmount: [(v) => (v ? '' : this.$t('common.after-tax-amount-is-required'))],
+          systemSize: [(v) => (v ? '' : this.$t('common.system-size-is-required'))],
         },
       },
     };
   },
 
   computed: {
-
     pricePerKwh() {
       const { afterTaxAmount } = this.form.quoteReviewDetails;
       const { systemSize } = this.form.quoteReviewDetails;
@@ -130,23 +166,40 @@ export default {
     },
 
     reviewDescription() {
-      if (this.pricePerKwh < 2) return this.$t('lead-quote-review.review-message.<2');
-      if (this.pricePerKwh < 4) return this.$t('lead-quote-review.review-message.2-4');
-      if (this.pricePerKwh < 5) return this.$t('lead-quote-review.review-message.4-5');
-      return this.$t('lead-quote-review.review-message.>5');
+      switch (this.pricePerKwh) {
+        case this.pricePerKwh < 2:
+          return this.$t('lead-quote-review.review-message.<2');
+        case this.pricePerKwh < 4:
+          return this.$t('lead-quote-review.review-message.2-4');
+        case this.pricePerKwh < 5:
+          return this.$t('lead-quote-review.review-message.4-5');
+        default:
+          return this.$t('lead-quote-review.review-message.>5');
+      }
     },
 
     color() {
-      if (this.pricePerKwh < 1) return 'indigo';
-      if (this.pricePerKwh < 2) return 'teal';
-      if (this.pricePerKwh < 2.5) return 'green';
-      if (this.pricePerKwh < 3) return 'orange';
-      return 'red';
+      switch (this.pricePerKwh) {
+        case this.pricePerKwh < 1:
+          return 'indigo';
+        case this.pricePerKwh < 2:
+          return 'teal';
+        case this.pricePerKwh < 2.5:
+          return 'green';
+        case this.pricePerKwh < 3:
+          return 'orange';
+        default:
+          return 'red';
+      }
     },
-  },
 
-  methods: {
-
+    validateForm() {
+      const inputs = Object.keys(this.form.quoteReviewDetails);
+      inputs.pop();
+      const valid = inputs.every((input) => this.form.quoteReviewDetails[input] !== null);
+      console.log('🚀 ~ file: LeadQuoteReview.vue:200 ~ validateForm ~ valid', valid);
+      return valid;
+    },
   },
 };
 
