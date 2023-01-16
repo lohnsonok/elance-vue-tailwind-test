@@ -1,4 +1,5 @@
 import vue from 'rollup-plugin-vue';
+import css from 'rollup-plugin-css-only';
 import del from 'rollup-plugin-delete';
 import multiInput from 'rollup-plugin-multi-input';
 
@@ -16,7 +17,8 @@ const config = {
   plugins: [
     del({ targets: 'dist/*' }),
     multiInput(),
-    vue(),
+    css(),
+    vue({ css: false }),
   ],
 };
 

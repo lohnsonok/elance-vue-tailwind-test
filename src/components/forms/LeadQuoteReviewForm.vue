@@ -385,7 +385,7 @@
 import { validateEmail, validatePhone } from '@/utils';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import debounce from 'lodash/debounce';
-import mocks from '../../mocks/api';
+import mocks from '@/mocks/api';
 
 export default {
   name: 'LeadForm',

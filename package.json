@@ -21,6 +21,7 @@
     "geocoder": "^0.2.3",
     "lodash": "^4.17.21",
     "lodash.debounce": "^4.0.8",
+    "rollup-plugin-css-only": "^4.3.0",
     "vue-i18n": "^8.26.5",
     "vue-router": "^3.5.0"
   },
