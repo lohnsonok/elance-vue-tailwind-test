@@ -3,3 +3,37 @@
 @tailwind components;
 
 @tailwind utilities;
+
+
+/* Custom range */
+
+input[type="range"] {
+  -webkit-appearance: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  /* appearance: none; */
+  /* height: 80px;
+  width: 80px;
+  transform: translateY(-20%) translateY(-12px) translateX(-50%) rotate(45deg);
+  border-radius: 50% 50% 0;
+  background: #3f51b5;
+  cursor: pointer; */
+}
+
+/* input[type="range"]::-moz-range-thumb {
+  height: 80px;
+  width: 80px;
+  transform: translateY(-20%) translateY(-12px) translateX(-50%) rotate(45deg);
+  border-radius: 50% 50% 0;
+  background: #3f51b5;
+  cursor: pointer;
+} */
+
+.custom-slider-bullet{
+  transform: translateY(-20%) translateY(-12px) translateX(-50%) rotate(45deg);
+  border-radius: 50% 50% 0;
+  background: #3f51b5;
+  cursor: pointer;
+}

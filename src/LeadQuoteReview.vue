@@ -77,17 +77,25 @@
         <Spacer y="12" />
         <div :class="classes.smallContainer">
           <ul
-            className="relative ml-10 mr-10 hidden h-96 w-14 flex-col items-center justify-between font-bold text-primary sm:flex"
+            class="relative ml-10 mr-10 hidden w-14 flex-col items-center justify-between font-bold text-primary sm:flex"
           >
-            <li className="flex flex-col items-center justify-center">
+            <li class="flex flex-col items-center justify-center">
+              <label
+                id="label_price_per_kwh"
+                for="price_per_kwh"
+                class="text-white font-bold block relative"
+              >
+                <span class="block custom-slider-bullet h-20 w-20" />
+                <span class="absolute top-0 -left-9">{{ pricePerKwh }} €/Wc</span>
+              </label>
               <input
-                className="custom-slider-bullet h-3 w-80 bg-primary"
+                id="price_per_kwh"
+                class="h-0 w-full bg-primary"
                 type="range"
                 min="1"
                 max="5"
                 step="1"
                 :value="pricePerKwh"
-                disabled
                 @change="pricePerKwh = $event.target.value"
               >
             </li>
