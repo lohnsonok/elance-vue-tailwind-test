@@ -28,6 +28,7 @@
           >
             <Input
               v-model="form.quoteReviewDetails.afterTaxAmount"
+              :className="classes.input"
               name="afterTaxAmount"
               :label="$t('lead-quote-review.after-tax-price')"
               :rules="form.validationRules.afterTaxAmount"
@@ -42,6 +43,7 @@
           >
             <Input
               v-model="form.quoteReviewDetails.systemSize"
+              :className="classes.input"
               name="systemSize"
               :label="$t('lead-quote-review.system-size')"
               :rules="form.validationRules.systemSize"
@@ -72,7 +74,7 @@
         <p class="mt-4 mb-15 text-center">
           {{ reviewDescription }}
         </p>
-        <Spacer y="24" />
+        <Spacer y="12" />
         <div :class="classes.smallContainer">
           <ul
             className="relative ml-10 mr-10 hidden h-96 w-14 flex-col items-center justify-between font-bold text-primary sm:flex"
@@ -137,9 +139,20 @@
           class="max-w-max mx-auto"
         >
           <div class="xl:mt-5 mt-15">
-            <div
-              :class="classes.row"
-            >
+            <div class="relative py-8">
+              <div
+                class="absolute inset-0 flex items-center mb-4"
+                aria-hidden="true"
+              >
+                <div class="w-full border-t border-gray-300" />
+              </div>
+              <div class="relative flex justify-center">
+                <span class="px-3 bg-white text-lg font-medium text-gray-900">
+                  &nbsp;
+                </span>
+              </div>
+            </div>
+            <div :class="classes.row">
               <div :class="classes.col">
                 <h4
                   :class="classes.h4"
@@ -157,7 +170,9 @@
               <div :class="classes.col">
                 <div class="flex items-center justify-between space-x-6">
                   <label class="block">
-                    <span class="sr-only">{{ $t('lead-quote-review.check-technicals-for-quote.file-input-label') }}</span>
+                    <span class="sr-only">{{
+                      $t('lead-quote-review.check-technicals-for-quote.file-input-label')
+                    }}</span>
                     <input
                       id="profile_picture"
                       type="file"
@@ -176,7 +191,7 @@
           v-if="displayLeadForm"
           :class="classes.row"
         >
-          <div class="xl:mt-24 mt-15 mx-auto">
+          <div class="xl:mt-24 mt-15 mx-auto w-full max-w-4xl">
             <h4
               :class="classes.h4"
               class="mt-15"
@@ -189,6 +204,8 @@
             >
               {{ $t('lead-quote-review.check-solar-production.description') }}
             </p>
+
+            <Spacer :y="12" />
 
             <lead-form :quote-review-details="form.quoteReviewDetails" />
           </div>
@@ -263,8 +280,9 @@ export default {
         h1: 'md:text-2xl text-xl font-bold text-center',
         h4: 'md:text-xl text-lg font-bold',
         subtitle: 'md:text-base text-sm text-center max-w-2xl mx-auto',
-        small: 'md:text-sm text-xs text-center',
-        card: 'md:px-16 px-4 py-8 md:pb-16 max-w-5xl mx-auto',
+        small: 'md:text-sm text-xs',
+        card: 'md:px-16 px-4 py-8 md:pb-10 max-w-5xl mx-auto',
+        input: 'block w-full p-4 text-gray-900 border border-gray-300 bg-yellow-50 sm:text-md focus:ring-yellow-500 focus:border-yellow-500 rounded-full valid:ring-green-500 valid:border-green-500 focus-within:ring-2 focus-within:ring-yellow-500 focus-within:border-yellow-500 focus-within:ring-opacity-50 invalid:ring-red-500 invalid:border-red-500 transition-all duration-500',
         row: 'flex md:flex-row flex-col',
         col: 'md:px-4 px-0 mt-8',
         form: 'md:px-4 px-0 mt-8',
@@ -354,7 +372,7 @@ export default {
 
 .custom-input-file::-webkit-file-upload-button {
   background: rgb(214, 214, 214);
-  color:#000;
+  color: #000;
   border: none;
   border-radius: 5px;
   font-weight: 500;

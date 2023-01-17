@@ -13,8 +13,7 @@
       :required="required"
       :disabled="disabled"
       :aria-invalid="invalidField"
-      class="block w-full p-4 text-gray-900 border border-gray-300 bg-yellow-50 sm:text-md focus:ring-yellow-500 focus:border-yellow-500 rounded-full
-      valid:ring-green-500 valid:border-green-500 focus-within:ring-2 focus-within:ring-yellow-500 focus-within:border-yellow-500 focus-within:ring-opacity-50 invalid:ring-red-500 invalid:border-red-500 transition-all duration-500"
+      :class="className"
       @input="$emit('update', $event.target.value)"
       @blur="touched = true"
     >
@@ -73,6 +72,10 @@ export default {
     },
     value: {
       type: [String, Number],
+      default: '',
+    },
+    className: {
+      type: String,
       default: '',
     },
   },

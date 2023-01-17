@@ -5,6 +5,10 @@ const French = {
     title: 'Obtenez votre devis de panneaux solaires',
     description: 'Obtenez votre devis de panneaux solaires en 2 minutes',
     'get-quote-button': 'Obtenir mon devis',
+    form: {
+      'in-24h-we-respond': 'vous recevrez l\'évaluation de votre ensoleillement sous 24 heures par courriel',
+      'verify-map-pin-location': 'confirmer l’emplacement avec la balise',
+    },
   },
   'lead-quote-review': {
     title: 'Vérifier votre devis',
@@ -32,6 +36,13 @@ const French = {
   common: {
     'after-tax-amount-is-required': 'Le montant TTC est requis',
     'system-size-is-required': 'La taille du système est requise',
+    'last-name': 'Nom',
+    'email-address': 'Adresse e-mail',
+    address: 'Adresse',
+    'stay-private': 'informations aucunement partagées par élance',
+    'last-name-is-required': 'Le nom est requis',
+    'email-address-is-required': 'L\'adresse e-mail est requise',
+    'address-is-required': 'L\'adresse est requise',
   },
   footer: {
     description: 'Elance, leader dans le fourniture de panneaux solaires et de solutions d\'énergie renouvelable.',

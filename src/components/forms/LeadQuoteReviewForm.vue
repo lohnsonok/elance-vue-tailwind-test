@@ -1,6 +1,138 @@
 <template>
   <div :class="classes.container">
-    55
+    <div :class="classes.card">
+      <div class="mb-8 md:w-1/2">
+        <div :class="classes.row_col">
+          <p class="text-left caption mb-4 max-w-xs">
+            {{ $t("home.form.in-24h-we-respond") }}
+
+            <a
+              class="underline text-blue-400"
+              text
+              :href="
+                informationalUrl(
+                  '/knowledge-center/your-account/solar-potential'
+                )
+              "
+              alt="élance potentiel solaire"
+              rel="noopener noreferer"
+              target="_blank"
+            >
+              En savoir plus
+            </a>
+          </p>
+
+          <div
+            :class="classes.row_col"
+          >
+            <div
+              :class="classes.col"
+            >
+              <Input
+                v-model="name"
+                name="name"
+                :label="$t('common.last-name')"
+                :rules="validationRules.name"
+                type="text"
+                :className="classes.input"
+              />
+            </div>
+            <div
+              :class="classes.col"
+            >
+              <Input
+                v-model="email"
+                name="email"
+                :label="$t('common.email-address')"
+                :rules="validationRules.email"
+                type="text"
+                :className="classes.input"
+              />
+            </div>
+            <div
+              :class="classes.col"
+            >
+              <Input
+                v-model="formattedSearchAddress"
+                name="formattedSearchAddress"
+                :label="$t('common.address')"
+                :rules="formattedSearchAddress"
+                type="text"
+                :className="classes.input"
+              />
+            </div>
+
+            <div class="flex">
+              <img
+                src="@/assets/icons/lock.svg"
+                alt="map pin"
+                class="w-6 h-6"
+              >
+              <a
+                class="undecorated black--text"
+                text
+                :href="
+                  informationalUrl(
+                    '/knowledge-center/your-account/solar-potential'
+                  )
+                "
+                alt="élance solar potential link"
+                rel="noopener noreferer"
+                target="_blank"
+              >
+                <small>{{ $t("home.form.verify-map-pin-location") }}</small>
+              </a>
+            </div>
+            <div class="flex">
+              <img
+                src="@/assets/icons/pin_map.svg"
+                alt="map pin"
+                class="w-6 h-6"
+              >
+              <a
+                class="undecorated black--text"
+                text
+                :href="
+                  informationalUrl(
+                    '/knowledge-center/your-account/data-privacy'
+                  )
+                "
+                alt="élance privacy policy link"
+                rel="noopener noreferer"
+                target="_blank"
+              >
+                <small>{{ $t("common.stay-private") }}</small>
+              </a>
+            </div>
+
+            <div
+          :class="classes.col"
+        >
+          <button
+            type="submit"
+            :loading="saving"
+            :disabled="!valid || saving || saved || loadingAddress || loadingMap"
+            :class="classes.button"
+            @click="displayLeadForm = true"
+          >
+          {{ $t("lead-quote-review.check-solar-production.button") }}
+          </button>
+        </div>
+
+          </div>
+        </div>
+      </div>
+      <iframe
+          id="gmap_canvas"
+          title="address"
+          class="mb-8 h-96 md:h-full md:w-1/2"
+          src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d2626.70194972017!2d2.3243698!3d48.825748!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e671ae17e3410d%3A0x59a503e0b439e9f3!2s101%20Av.%20du%20G%C3%A9n%C3%A9ral%20Leclerc%2C%2075014%20Paris%2C%20France!5e0!3m2!1sfr!2sbj!4v1664124984858!5m2!1sfr!2sbj"
+          frameBorder="0"
+          scrolling="no"
+          marginHeight="0"
+          marginWidth="0"
+        />
+    </div>
   </div>
 </template>
 
@@ -10,9 +142,13 @@ import { validateEmail, validatePhone } from '@/utils';
 import debounce from 'lodash/debounce';
 import mocks from '@/mocks/api';
 
+import Input from '@/components/inputs/Input.vue';
+
 export default {
   name: 'LeadForm',
-
+  components: {
+    Input,
+  },
   props: {
     quoteReviewDetails: {
       required: false,
@@ -23,10 +159,13 @@ export default {
   data() {
     return {
       classes: {
-        container: 'flex flex-column justify-center align-center',
+        container: 'mx-auto flex flex-column w-full',
+        card: 'flex md:flex-row flex-col justify-center align-center bg-white p-6 md:p-8 rounded-lg shadow-sm border border-gray-300 border-opacity-50 w-full',
         row: 'flex md:flex-row flex-col',
-        col: 'md:px-4 px-0 mt-8',
+        row_col: 'flex flex-col',
+        col: 'md:px-4 px-0 mt-2',
         form: 'md:px-4 px-0 mt-8',
+        input: 'rounded-lg border-b border-gray-100 bg-gray-100 px-5 py-2.5 text-left text-sm font-medium text-gray-600 transition-all hover:border-gray-200 hover:bg-gray-200 focus:ring focus:ring-gray-50 disabled:opacity-70',
         button: 'rounded-lg border border-yellow-100 bg-yellow-100 px-5 py-2.5 text-center text-sm font-medium text-yellow-600 transition-all hover:border-yellow-200 hover:bg-yellow-200 focus:ring focus:ring-yellow-50 disabled:opacity-70',
       },
       name: '',
@@ -175,12 +314,12 @@ export default {
 
 
   mounted() {
-    if (this.showMap) {
+    /* if (this.showMap) {
       this.$gmapApiPromiseLazy().then(({ maps }) => {
         this.geocoder = new maps.Geocoder();
         this.autocompleter = new maps.places.AutocompleteService();
       });
-    }
+    } */
   },
 
 
